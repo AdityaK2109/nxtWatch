@@ -55,7 +55,7 @@ export const LoginFormContainer = styled.form`
   flex-direction: column;
   text-align: left;
 `
-export const LabelText = styled.p`
+export const LabelText = styled.label`
   color: ${props => (props.isDarkThemeActive ? '#f1f5f9' : '#94a3b8')};
   font-size: 13px;
   font-weight: 500;
@@ -87,14 +87,15 @@ export const InputTag = styled.input`
 export const ShowPasswordContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 24px;
+  margin-top: 10px;
 `
 export const CheckBoxTag = styled.input`
   height: 15px;
   width: 15px;
   margin-right: 7px;
 `
-export const ShowPasswordText = styled.p`
+export const ShowPasswordText = styled.label`
   font-size: 14px;
   line-height: 1.2;
   color: ${props => (props.isDarkThemeActive ? '#ffffff' : '#0f0f0f')};

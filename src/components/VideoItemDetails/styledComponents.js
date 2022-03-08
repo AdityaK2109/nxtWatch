@@ -19,7 +19,7 @@ export const VideoPlayerContainer = styled.div`
   margin-right: auto;
 `
 
-export const VideoName = styled.h1`
+export const VideoName = styled.p`
   margin-top: 28px;
   font-size: 18px;
   font-family: 'Roboto';
@@ -71,6 +71,9 @@ export const ButtonTag = styled.button`
   display: flex;
   align-items: center;
   margin-right: 18px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Roboto';
   color: #64748b;
   color: ${props => props.isActive && '#2563eb'};
   @media (min-width: 768px) {
@@ -83,14 +86,6 @@ export const ButtonTag = styled.button`
   }
   @media (max-width: 380px) {
     margin-right: 13px;
-  }
-`
-export const ButtonText = styled.span`
-  font-size: 15px;
-  font-weight: 500;
-  font-family: 'Roboto';
-  margin-left: 5px;
-  @media (max-width: 380px) {
     font-size: 14px;
   }
 `
@@ -111,7 +106,7 @@ export const ChannelLogo = styled.img`
 export const ChannelTextDetails = styled.div`
   margin-left: 18px;
 `
-export const ChannelName = styled.h1`
+export const ChannelName = styled.p`
   font-size: 16px;
   font-family: 'Roboto';
   font-weight: normal;
@@ -127,21 +122,13 @@ export const SubscriberCountText = styled.p`
     font-weight: normal;
   }
 `
-export const DesktopViewChannelDescription = styled.p`
-  font-size: 15px;
-  color: ${props => (props.isDarkThemeActive ? '#f9f9f9' : '#64748b')};
-  font-weight: normal;
-  font-family: 'Roboto';
-  @media (max-width: 767px) {
-    display: none;
-  }
-`
-export const MobileViewChannelDescription = styled.p`
+export const ChannelDescription = styled.p`
   font-size: 14px;
   color: ${props => (props.isDarkThemeActive ? '#f9f9f9' : '#64748b')};
   font-weight: normal;
   font-family: 'Roboto';
   @media (min-width: 768px) {
-    display: none;
+    font-size: 15px;
+    margin-left: 62px;
   }
 `

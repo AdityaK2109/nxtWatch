@@ -28,9 +28,7 @@ const BannerSection = props => {
           src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
           alt="nxt watch logo"
         />
-        <BannerDescription>
-          Buy Nxt Watch Prepaid plans with UPI
-        </BannerDescription>
+        <BannerDescription>Buy Nxt Watch Premium</BannerDescription>
         <GetItNowButton type="button">GET IT NOW</GetItNowButton>
       </TextAndLogoContainer>
     </BannerContainer>

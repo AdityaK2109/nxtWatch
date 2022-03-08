@@ -3,12 +3,22 @@ import styled from 'styled-components/macro'
 export const PageContainer = styled.div`
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 `
 
 export const SidebarAndHomePageContainer = styled.div`
   display: flex;
-  width: 100%;
-  height: 93%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 65px;
+  @media (max-width: 575px) {
+    top: 62px;
+  }
+  @media (max-width: 400px) {
+    top: 61px;
+  }
 `
 export const BannerAndHomePageContainer = styled.div`
   height: auto;
@@ -89,7 +99,7 @@ export const SearchButton = styled.button`
 `
 export const FailureImgTag = styled.img`
   width: 65%;
-  max-width: 300px;
+  max-width: 450px;
   margin-bottom: 30px;
   @media (max-width: 380px) {
     width: 80%;

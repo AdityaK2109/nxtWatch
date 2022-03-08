@@ -47,7 +47,11 @@ const Header = props => {
             </Link>
             <NavItemsContainer>
               <EachNavItem key="themeButton">
-                <ThemeButton type="button" onClick={onClickChangeTheme}>
+                <ThemeButton
+                  type="button"
+                  data-testid="theme"
+                  onClick={onClickChangeTheme}
+                >
                   {isDarkThemeActive ? (
                     <FiSun size={22} color="#f9f9f9" />
                   ) : (
@@ -88,10 +92,10 @@ const Header = props => {
                   {close => (
                     <PopupContainer isDarkThemeActive={isDarkThemeActive}>
                       <PopupDescription isDarkThemeActive={isDarkThemeActive}>
-                        Are you sure you want to logout?
+                        Are you sure, you want to logout
                       </PopupDescription>
                       <CloseButton type="button" onClick={() => close()}>
-                        Close
+                        Cancel
                       </CloseButton>
                       <ConfirmButton
                         type="button"

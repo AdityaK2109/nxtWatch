@@ -18,15 +18,13 @@ import {
   PublishedDuration,
   LikeButtonContainer,
   ButtonTag,
-  ButtonText,
   HorizontalLineTag,
   ChannelDetailsContainer,
   ChannelLogo,
   ChannelTextDetails,
   ChannelName,
   SubscriberCountText,
-  DesktopViewChannelDescription,
-  MobileViewChannelDescription,
+  ChannelDescription,
 } from './styledComponents'
 import {
   PageContainer,
@@ -45,7 +43,6 @@ const apiStatusConstants = {
   loading: 'LOADING',
   success: 'SUCCESS',
   failure: 'FAILURE',
-  emptyList: 'EMPTY LIST',
 }
 
 class VideoItemDetails extends Component {
@@ -63,7 +60,6 @@ class VideoItemDetails extends Component {
   }
 
   getVideosData = async () => {
-    console.log('start')
     this.setState({apiStatus: apiStatusConstants.loading})
     const {match} = this.props
     const {params} = match
@@ -78,7 +74,6 @@ class VideoItemDetails extends Component {
     }
     const response = await fetch(apiUrl, options)
     const data = await response.json()
-    console.log(data)
     if (response.ok === true) {
       const videoDetails = data.video_details
       const updatedData = {
@@ -95,7 +90,6 @@ class VideoItemDetails extends Component {
         publishedAt: videoDetails.published_at,
         description: videoDetails.description,
       }
-      console.log(updatedData)
       this.setState({
         apiStatus: apiStatusConstants.success,
         videoDetails: updatedData,
@@ -109,24 +103,6 @@ class VideoItemDetails extends Component {
     this.getVideosData()
   }
 
-  onClickLikeButton = () => {
-    const {isLiked} = this.state
-    if (isLiked === false) {
-      this.setState({isLiked: true, isDisliked: false, activeButton: 'LIKE'})
-    } else {
-      this.setState({isLiked: false, activeButton: ''})
-    }
-  }
-
-  onClickDislikeButton = () => {
-    const {isDisliked} = this.state
-    if (isDisliked === false) {
-      this.setState({isDisliked: true, isLiked: false, activeButton: 'DISLIKE'})
-    } else {
-      this.setState({isDisliked: false, activeButton: ''})
-    }
-  }
-
   changeIsSavedToTrue = () => {
     this.setState({isSaved: true})
   }
@@ -136,7 +112,8 @@ class VideoItemDetails extends Component {
   }
 
   render() {
-    const {videoDetails, activeButton, apiStatus, isSaved} = this.state
+    const {apiStatus, videoDetails} = this.state
+    let {activeButton, isLiked, isDisliked, isSaved} = this.state
     console.log(apiStatus)
     return (
       <NxtWatchContext.Consumer>
@@ -146,11 +123,42 @@ class VideoItemDetails extends Component {
             addVideo,
             removeVideo,
             savedVideosList,
+            likeDislikeVideoList,
+            addLikedDisLikedVideos,
+            removeLikedDisLikedVideos,
           } = value
 
-          console.log(savedVideosList)
-
           const renderSuccessView = () => {
+            const isVideoAlreadySaved = savedVideosList.find(
+              eachVideo => eachVideo.id === videoDetails.id,
+            )
+            console.log(isVideoAlreadySaved)
+
+            if (isVideoAlreadySaved) {
+              console.log('aaaaaaaaaa')
+              console.log(isVideoAlreadySaved)
+              isLiked = isVideoAlreadySaved.isLiked
+              isDisliked = isVideoAlreadySaved.isDisliked
+              activeButton = isVideoAlreadySaved.activeButton
+              isSaved = true
+            }
+
+            if (likeDislikeVideoList.length !== 0) {
+              const isVideoLikeDislike = likeDislikeVideoList.filter(
+                eachObject => {
+                  if (eachObject.id === videoDetails.id) {
+                    isLiked = eachObject.isLiked
+                    isDisliked = eachObject.isDisliked
+                    activeButton = eachObject.activeButton
+                    return eachObject
+                  }
+
+                  return eachObject
+                },
+              )
+              console.log(isVideoLikeDislike)
+            }
+
             const {
               id,
               title,
@@ -161,8 +169,45 @@ class VideoItemDetails extends Component {
               description,
             } = videoDetails
 
+            const onClickLikeButton = () => {
+              if (isLiked === false) {
+                addLikedDisLikedVideos({
+                  id,
+                  isLiked: true,
+                  isDisliked: false,
+                  activeButton: 'LIKE',
+                })
+                this.setState({
+                  isLiked: true,
+                  isDisliked: false,
+                  activeButton: 'LIKE',
+                })
+              } else {
+                removeLikedDisLikedVideos(id)
+                this.setState({isLiked: false, activeButton: ''})
+              }
+            }
+
+            const onClickDislikeButton = () => {
+              if (isDisliked === false) {
+                addLikedDisLikedVideos({
+                  id,
+                  isLiked: false,
+                  isDisliked: true,
+                  activeButton: 'DISLIKE',
+                })
+                this.setState({
+                  isDisliked: true,
+                  isLiked: false,
+                  activeButton: 'DISLIKE',
+                })
+              } else {
+                removeLikedDisLikedVideos(id)
+                this.setState({isDisliked: false, activeButton: ''})
+              }
+            }
+
             const onClickSaveButton = () => {
-              const {isLiked, isDisliked} = this.state
               this.changeIsSavedToTrue()
               addVideo({...videoDetails, isLiked, isDisliked, activeButton})
             }
@@ -198,23 +243,23 @@ class VideoItemDetails extends Component {
                   <LikeButtonContainer>
                     <ButtonTag
                       isDarkThemeActive={isDarkThemeActive}
-                      onClick={this.onClickLikeButton}
+                      onClick={onClickLikeButton}
                       type="button"
                       isActive={activeButton === 'LIKE'}
                       name="likeDislikeButton"
                     >
-                      <FiThumbsUp size={18} />
-                      <ButtonText>Like</ButtonText>
+                      <FiThumbsUp size={18} style={{marginRight: '5px'}} />
+                      Like
                     </ButtonTag>
                     <ButtonTag
                       isDarkThemeActive={isDarkThemeActive}
-                      onClick={this.onClickDislikeButton}
+                      onClick={onClickDislikeButton}
                       type="button"
                       isActive={activeButton === 'DISLIKE'}
                       name="likeDislikeButton"
                     >
-                      <FiThumbsDown size={18} />
-                      <ButtonText>Dislike</ButtonText>
+                      <FiThumbsDown size={18} style={{marginRight: '6px'}} />
+                      Dislike
                     </ButtonTag>
                     {isSaved ? (
                       <ButtonTag
@@ -223,8 +268,8 @@ class VideoItemDetails extends Component {
                         isDarkThemeActive={isDarkThemeActive}
                         isActive={isSaved}
                       >
-                        <CgPlayListAdd size={22} />
-                        <ButtonText>Saved</ButtonText>
+                        <CgPlayListAdd size={22} style={{marginRight: '5px'}} />
+                        Saved
                       </ButtonTag>
                     ) : (
                       <ButtonTag
@@ -232,8 +277,8 @@ class VideoItemDetails extends Component {
                         onClick={onClickSaveButton}
                         type="button"
                       >
-                        <CgPlayListAdd size={22} />
-                        <ButtonText>Save</ButtonText>
+                        <CgPlayListAdd size={22} style={{marginRight: '5px'}} />
+                        Save
                       </ButtonTag>
                     )}
                   </LikeButtonContainer>
@@ -251,18 +296,11 @@ class VideoItemDetails extends Component {
                     <SubscriberCountText isDarkThemeActive={isDarkThemeActive}>
                       {channel.subscriberCount} subscribers
                     </SubscriberCountText>
-                    <DesktopViewChannelDescription
-                      isDarkThemeActive={isDarkThemeActive}
-                    >
-                      {description}
-                    </DesktopViewChannelDescription>
                   </ChannelTextDetails>
                 </ChannelDetailsContainer>
-                <MobileViewChannelDescription
-                  isDarkThemeActive={isDarkThemeActive}
-                >
+                <ChannelDescription isDarkThemeActive={isDarkThemeActive}>
                   {description}
-                </MobileViewChannelDescription>
+                </ChannelDescription>
               </VideoItemDetailsContainer>
             )
           }
@@ -319,7 +357,10 @@ class VideoItemDetails extends Component {
               <Header />
               <SidebarAndHomePageContainer>
                 <Sidebar />
-                <PageContentContainer isDarkThemeActive={isDarkThemeActive}>
+                <PageContentContainer
+                  data-testid="videoItemDetails"
+                  isDarkThemeActive={isDarkThemeActive}
+                >
                   {renderDifferentView()}
                 </PageContentContainer>
               </SidebarAndHomePageContainer>

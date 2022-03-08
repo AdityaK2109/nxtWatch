@@ -33,7 +33,7 @@ export const VideoDetailsContainer = styled.div`
   padding-left: 10px;
   padding-right: 10px;
 `
-export const VideoNameHeading = styled.h1`
+export const VideoNameHeading = styled.p`
   margin-top: 0px;
   font-size: 15px;
   font-weight: normal;

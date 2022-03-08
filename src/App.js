@@ -1,8 +1,12 @@
 import './App.css'
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route, Redirect} from 'react-router-dom'
 import {Component} from 'react'
 import LoginRoute from './components/LoginRoute'
 import HomeRoute from './components/HomeRoute'
+import TrendingRoute from './components/TrendingRoute'
+import GamingRoute from './components/GamingRoute'
+import SavedVideosRoute from './components/SavedVideosRoute'
+import NotFoundRoute from './components/NotFoundRoute'
 import VideoItemDetails from './components/VideoItemDetails'
 import NxtWatchContext from './context/NxtWatchContext'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -12,6 +16,7 @@ class App extends Component {
   state = {
     isDarkThemeActive: false,
     savedVideoList: [],
+    likeDislikeVideoList: [],
   }
 
   changeTheme = () => {
@@ -40,8 +45,45 @@ class App extends Component {
     }
   }
 
+  addLikedDisLikedVideos = videoDetails => {
+    const {likeDislikeVideoList} = this.state
+    const isVideoPresent = likeDislikeVideoList.find(
+      eachVideo => eachVideo.id === videoDetails.id,
+    )
+    if (isVideoPresent !== false) {
+      this.setState(props => ({
+        likeDislikeVideoList: [...props.likeDislikeVideoList, videoDetails],
+      }))
+    } else {
+      this.setState(
+        props => ({
+          likeDislikeVideoList: props.likeDislikeVideoList.map(eachVideo => {
+            if (eachVideo.id === videoDetails.id) {
+              return videoDetails
+            }
+            return eachVideo
+          }),
+        }),
+        console.log(likeDislikeVideoList),
+      )
+    }
+  }
+
+  removeLikedDisLikedVideos = id => {
+    this.setState(props => ({
+      likeDislikeVideoList: props.likeDislikeVideoList.filter(
+        eachVideo => eachVideo.id !== id,
+      ),
+    }))
+  }
+
   render() {
-    const {isDarkThemeActive, savedVideoList, isSaved} = this.state
+    const {
+      isDarkThemeActive,
+      savedVideoList,
+      isSaved,
+      likeDislikeVideoList,
+    } = this.state
     return (
       <NxtWatchContext.Provider
         value={{
@@ -51,6 +93,9 @@ class App extends Component {
           removeVideo: this.removeVideo,
           savedVideosList: savedVideoList,
           isSaved,
+          likeDislikeVideoList,
+          addLikedDisLikedVideos: this.addLikedDisLikedVideos,
+          removeLikedDisLikedVideos: this.removeLikedDisLikedVideos,
         }}
       >
         <Switch>
@@ -61,6 +106,15 @@ class App extends Component {
             path="/videos/:id"
             component={VideoItemDetails}
           />
+          <ProtectedRoute exact path="/trending" component={TrendingRoute} />
+          <ProtectedRoute exact path="/gaming" component={GamingRoute} />
+          <ProtectedRoute
+            exact
+            path="/saved-videos"
+            component={SavedVideosRoute}
+          />
+          <Route path="/not-found" component={NotFoundRoute} />
+          <Redirect to="not-found" />
         </Switch>
       </NxtWatchContext.Provider>
     )

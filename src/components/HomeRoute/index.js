@@ -63,10 +63,8 @@ class HomeRoute extends Component {
     }
     const response = await fetch(apiUrl, options)
     const data = await response.json()
-    console.log(data)
     if (response.ok === true) {
       if (data.videos.length === 0) {
-        console.log('empty list')
         this.setState({apiStatus: apiStatusConstants.emptyList})
       } else {
         const updatedList = data.videos.map(eachObject => ({
@@ -80,12 +78,13 @@ class HomeRoute extends Component {
           viewCount: eachObject.view_count,
           publishedAt: eachObject.published_at,
         }))
-        console.log(updatedList)
         this.setState({
           videosList: updatedList,
           apiStatus: apiStatusConstants.success,
         })
       }
+    } else {
+      this.setState({apiStatus: apiStatusConstants.failure})
     }
   }
 
@@ -152,8 +151,7 @@ class HomeRoute extends Component {
                   Oops! Something Went Wrong
                 </FailureHeading>
                 <FailureDescription isDarkThemeActive={isDarkThemeActive}>
-                  We are having some trouble to complete your request. Please
-                  try again.
+                  We are having some trouble
                 </FailureDescription>
                 <RetryButton type="button" onClick={this.onClickRetryButton}>
                   Retry

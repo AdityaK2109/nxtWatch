@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import {Redirect} from 'react-router-dom'
 import {
   LoginPageContainer,
   LoginCardContainer,
@@ -71,6 +72,12 @@ class LoginRoute extends Component {
       errorMsg,
       showErrorMsg,
     } = this.state
+
+    const jwtToken = Cookies.get('jwt_token')
+
+    if (jwtToken !== undefined) {
+      return <Redirect to="/" />
+    }
 
     return (
       <NxtWatchContext.Consumer>

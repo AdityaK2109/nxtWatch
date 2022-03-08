@@ -24,14 +24,13 @@ const VideoCardItem = props => {
   const publishedDuration = duration.substring(
     duration.indexOf(duration.match(/\d+/g)),
   )
-  console.log(publishedDuration)
 
   return (
     <VideoCard>
       <Link to={`/videos/${id}`} style={{textDecoration: 'none'}}>
         <ThumbnailImgTag src={thumbnailUrl} alt="video thumbnail" />
         <ChannelLogoAndVideoDetailsContainer>
-          <ChannelLogoImg src={channel.profileImageUrl} alt="video thumbnail" />
+          <ChannelLogoImg src={channel.profileImageUrl} alt="channel logo" />
           <VideoDetailsContainer>
             <VideoNameHeading isDarkThemeActive={isDarkThemeActive}>
               {title}

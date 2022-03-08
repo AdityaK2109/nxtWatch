@@ -7,6 +7,9 @@ const NxtWatchContext = React.createContext({
   addVideo: () => {},
   removeVideo: () => {},
   isSaved: false,
+  likeDislikeVideoList: [],
+  addLikedDisLikedVideos: () => {},
+  removeLikedDisLikedVideos: () => {},
 })
 
 export default NxtWatchContext
